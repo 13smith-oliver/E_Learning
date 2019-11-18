@@ -25,7 +25,7 @@ SECRET_KEY = 'v!=ab9fxmkacnyyh2+p(tz^@-+@f30%+lt_%foc1m+in2pktv3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_hosts',
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,9 +49,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
-ROOT_URLCONF = 'E_Learning.urls'
+ROOT_URLCONF = 'common.urls'
+ROOT_HOSTCONF = "E_Learning.hosts"
+DEFAULT_HOST = "common"
 
 TEMPLATES = [
     {

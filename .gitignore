@@ -73,3 +73,5 @@ fabric.properties
 # Cloud9 IDE - http://c9.io
 .c9revisions
 .c9
+
+get-pip.py
