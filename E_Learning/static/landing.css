@@ -11,6 +11,8 @@ button {
     width: 25%;
     margin: auto;
     border: black 1px solid;
+    border-radius: 5px;
+    background-color: grey;
 }
 html, body {
     width: 100%;
@@ -18,4 +20,5 @@ html, body {
     margin: auto;
     display: flex;
     padding: 0;
+    background-color: lightgrey;
 }
