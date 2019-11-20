@@ -1,10 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
+    <meta charset="utf-8">
+    <title>E-Learning Project</title>
+    <link href="{% static 'landing.css' %}" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-$END$
+    <div id="centred">
+        <button onclick="window.location.href='http://public.osmith.me'" type="button">
+         Public Site</button>
+        <button onclick="window.location.href='http://corporate.osmith.me'" type="button">
+         Corporate Site</button>
+        <button onclick="window.location.href='http://manager.osmith.me'" type="button">
+         Manager Site</button>
+    </div>
 </body>
+
 </html>

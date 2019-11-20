@@ -56,10 +56,18 @@ ROOT_URLCONF = 'common.urls'
 ROOT_HOSTCONF = "E_Learning.hosts"
 DEFAULT_HOST = "common"
 
+#SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+#SECURE_HSTS_SECONDS = 300
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['E_Learning/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,3 +131,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
