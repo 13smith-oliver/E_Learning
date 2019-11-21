@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import LoginForm
 
@@ -13,9 +14,10 @@ def public_home(request):
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user is not None:
+                # TODO: Change the checking to check account type (public, corporate, manager)
                 if user.is_superuser:
                     login(request, user)
-                    return redirect("/admin")
+                    return redirect()  # TODO: Edit redirect links
                 elif user.is_staff:
                     login(request, user)
                     return redirect("/staff")
@@ -25,7 +27,7 @@ def public_home(request):
 
             else:
                 form = LoginForm()
-                return render(request, "error.html", {"form": form})
+                return render(request, "error.html", {"form": form})  # todo: edit error.html and form
 
     else:
         form = LoginForm()

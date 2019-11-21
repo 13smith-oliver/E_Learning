@@ -5,3 +5,4 @@ from django.http import HttpResponse
 # Create your views here.
 def corporate_home(request):
     return HttpResponse("corporate home")
+    # TODO: add logins from public views into here
