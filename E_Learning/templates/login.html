@@ -16,9 +16,17 @@
         <h2>Log In</h2>
     </div>
     <div class="inputs">
-        {{ form }}
-        <script>document.getElementById("id_password").type="password";</script>
+        {{ form }} {# TODO: Check form is layed out properly #}
+        <script>document.getElementById("id_password").type = "password";</script>
         <button type="submit" class="form-button">LOGIN</button>
+        {% if account_type == "public" %}
+            <a href="/account/public">Create Account</a>
+        {% elif account_type == "corporate" %}
+            <a href="/account/corporate">Create Account</a>
+        {% else %}
+            <p>Contact administrators for a manager account</p>
+        {% endif %}
+        {# TODO: Add block for reset password #}
         {% block error %}{% endblock %}
     </div>
 </form>
