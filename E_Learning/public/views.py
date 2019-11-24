@@ -1,11 +1,14 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 
-from E_Learning.common.models import AppUsers
+from common.models import AppUsers
 
 
 def public_check(user):
-    return user.users.account_type == AppUsers.PUBLIC
+    if user.user.is_anonymous:
+        return False
+    else:
+        return user.users.account_type == AppUsers.PUBLIC
 
 
 @user_passes_test(public_check)  # TODO: Add decorator to all views
