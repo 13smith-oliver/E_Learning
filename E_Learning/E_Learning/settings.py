@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'common.urls'
 ROOT_HOSTCONF = "E_Learning.hosts"
-DEFAULT_HOST = "common"
+DEFAULT_HOST = 'common_urls'
 
 # SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
