@@ -5,10 +5,7 @@ from common.models import AppUsers
 
 
 def public_check(user):
-    if user.user.is_anonymous:
-        return False
-    else:
-        return user.users.account_type == AppUsers.PUBLIC
+    return user.users.account_type == AppUsers.PUBLIC
 
 
 @user_passes_test(public_check)  # TODO: Add decorator to all views
