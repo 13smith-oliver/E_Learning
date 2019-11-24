@@ -11,6 +11,6 @@ def manager_check(user):
         return user.AppUsers.account_type == AppUsers.MANAGER
 
 
-@user_passes_test(manager_check)  # TODO: Add decorator to all views
+@user_passes_test(manager_check, login_url='/login/manager', redirect_field_name=None)  # TODO: Add decorator to all views
 def manager_home(request):
     return HttpResponse("manager home")

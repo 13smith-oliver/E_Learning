@@ -11,6 +11,6 @@ def corporate_check(user):
         return user.AppUsers.account_type == AppUsers.CORPORATE
 
 
-@user_passes_test(corporate_check)  # TODO: Add decorator to all views
+@user_passes_test(corporate_check, login_url='/login/corporate', redirect_field_name=None)  # TODO: Add decorator to all views
 def corporate_home(request):
     return HttpResponse("corporate home")
