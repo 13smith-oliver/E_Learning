@@ -2,12 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Companies:
+class Companies(models.Model):
     company_id = models.AutoField()
     name = models.CharField()
 
 
-class Users:
+class AppUsers(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     company_id = models.ForeignKey(Companies, on_delete=models.SET_NULL, null=True)
