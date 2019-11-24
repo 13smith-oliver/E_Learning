@@ -1,11 +1,17 @@
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+<<<<<<< HEAD
 
 from E_Learning.common.models import Users
 from .forms import LoginForm
+=======
+>>>>>>> e6053a14932d0c3f1468af1dbf174c22c2f2bd04
 
+from .models import Users
+from .forms import LoginForm
 
+    
 # Create your views here.
 def home(request):
     return render(request, "landing.html")
