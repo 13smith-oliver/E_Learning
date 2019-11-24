@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 
-from E_Learning.common.models import Users
+from E_Learning.common.models import AppUsers
 
 
 def corporate_check(user):
-    return user.users.account_type == Users.CORPORATE
+    return user.users.account_type == AppUsers.CORPORATE
 
 
 @user_passes_test(corporate_check)  # TODO: Add decorator to all views

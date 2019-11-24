@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from .models import Users
+from .models import AppUsers
 from .forms import LoginForm
 
     
@@ -19,7 +19,7 @@ def public_login(request):
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.users.account_type == Users.PUBLIC:
+                if user.users.account_type == AppUsers.PUBLIC:
                     login(request, user)
                     return redirect("public.osmith.me")
             else:
@@ -40,7 +40,7 @@ def corporate_login(request):
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.users.account_type == Users.CORPORATE:
+                if user.users.account_type == AppUsers.CORPORATE:
                     login(request, user)
                     return redirect("corporate.osmith.me")
             else:
@@ -61,7 +61,7 @@ def manager_login(request):
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.users.account_type == Users.MANAGER:
+                if user.users.account_type == AppUsers.MANAGER:
                     login(request, user)
                     return redirect("manager.osmith.me")
             else:

@@ -36,6 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_hosts',
+    'common.apps.CommonConfig',
+    'corporate.apps.CorporateConfig',
+    'manager.apps.ManagerConfig',
+    'public.apps.PublicConfig',
 ]
 
 MIDDLEWARE = [
