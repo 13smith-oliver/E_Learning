@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from common.models import AppUsers
 
 
-def public_check(user): # TODO: Add check as function to all views
+def public_check(user):  # TODO: Add check as function to all views
     if user.is_anonymous or user.AppUsers.account_type != AppUsers.PUBLIC:
         return redirect('http://osmith.me/login/public')
     else:
