@@ -12,6 +12,7 @@ def home(request):
 
 
 def public_login(request):
+    # return HttpResponse('public login page')
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -25,7 +26,7 @@ def public_login(request):
             else:
                 form = LoginForm()
                 return render(request, "error.html",
-                              {"form": form, "account_type": "public"})  # todo: edit error.html and form
+                              {"form": form, "account_type": "public"})  # TODO: edit error.html and form
 
     else:
         form = LoginForm()
@@ -33,6 +34,7 @@ def public_login(request):
 
 
 def corporate_login(request):
+    # return HttpResponse('corporate login')
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -46,7 +48,7 @@ def corporate_login(request):
             else:
                 form = LoginForm()
                 return render(request, "error.html",
-                              {"form": form, "account_type": "corporate"})  # todo: edit error.html and form
+                              {"form": form, "account_type": "corporate"})  # TODO: edit error.html and form
 
     else:
         form = LoginForm()
@@ -54,6 +56,7 @@ def corporate_login(request):
 
 
 def manager_login(request):
+    # return HttpResponse('manager login')
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -66,7 +69,7 @@ def manager_login(request):
                     return redirect("manager.osmith.me")
             else:
                 form = LoginForm()
-                return render(request, "error.html", {"form": form})  # todo: edit error.html and form
+                return render(request, "error.html", {"form": form})  # TODO: edit error.html and form
 
     else:
         form = LoginForm()

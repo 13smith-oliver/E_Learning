@@ -1,17 +1,16 @@
-from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
+from django.shortcuts import redirect
 
 from common.models import AppUsers
-from django_hosts.resolvers import reverse
 
 
-def corporate_check(user):
-    if user.is_anonymous:
-        return False
-    else:
-        return user.AppUsers.account_type == AppUsers.CORPORATE
+def corporate_check(user): # TODO: Add check as function to all views
+    if user.is_anonymous or user.AppUsers.account_type != AppUsers.CORPORATE:
+        return redirect('http://osmith.me/login/corporate')
 
 
-@user_passes_test(corporate_check, login_url=reverse('corporate_login', host='common_urls'), redirect_field_name=None)  # TODO: Add decorator to all views
 def corporate_home(request):
+    check = corporate_check(request.user)
+    if check is not None:
+        return check
     return HttpResponse("corporate home")

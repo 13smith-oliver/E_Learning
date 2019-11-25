@@ -1,17 +1,18 @@
-from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import redirect
 from django.http import HttpResponse
-from django_hosts.resolvers import reverse
 
 from common.models import AppUsers
 
 
-def public_check(user):
-    if user.is_anonymous:
-        return False
+def public_check(user): # TODO: Add check as function to all views
+    if user.is_anonymous or user.AppUsers.account_type != AppUsers.PUBLIC:
+        return redirect('http://osmith.me/login/public')
     else:
-        return user.AppUsers.account_type == AppUsers.PUBLIC
+        return None
 
 
-@user_passes_test(public_check, login_url=reverse('public_login', host='common_urls'), redirect_field_name=None)  # TODO: Add decorator to all views
 def public_home(request):
+    check = public_check(request.user)
+    if check is not None:
+        return check
     return HttpResponse("public home")
