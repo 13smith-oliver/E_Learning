@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 /*TODO: Remove redundant styles and change colours + font */
 
 html, body {
     background: lightgrey;
     height: 100%;
+}
+
+* {
+    font-family: "Roboto", Arial, sans-serif;
 }
 
 .login-form {
@@ -30,7 +35,7 @@ button {
     height: 40px;
     justify-content: center;
     align-items: center;
-	margin: 7% 0;
+    margin: 7% 0;
 }
 
 input {
