@@ -1,58 +1,54 @@
 /*TODO: Remove redundant styles and change colours + font */
 
 html, body {
-	background: lightgrey;
-	height: 100%;
+    background: lightgrey;
+    height: 100%;
 }
+
 .login-form {
-	width: 400px;
-	height: 600px;
-	margin: auto;
-	border-radius: 15px;
-	background: grey;
-	font-family: Lato, sans-serif;
-
+    width: 400px;
+    height: 600px;
+    margin: auto;
+    border-radius: 15px;
+    background: grey;
 }
+
 .headers {
-	width: 80%;
-	margin-top: 10% !important;
-	font-family: Raleway, sans-serif;	
+    width: 80%;
+    margin: 10% auto;
 }
-.headers, .inputs, .admin-link {
-	margin: auto;
-}
-.inputs, .admin-link {
-	font-family: Lato, sans-serif;
-	width: 50%;
 
+.inputs {
+    margin: auto;
+    width: 50%;
 }
 
 button {
-	background: #4DFF73;
-	border: 1px solid rgba(0,0,0,0.40);
-	border-radius: 15px;
-	height: 40px;
-	justify-content: center;
-	align-items: center;
+    background: #AFAFAF;
+    border: 1px solid rgba(0, 0, 0, 0.40);
+    border-radius: 15px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+	margin: 7% 0;
 }
+
 input {
-    border: 1px solid rgba(0,0,0,0.40);
+    border: 1px solid rgba(0, 0, 0, 0.7);
     height: 40px;
     border-radius: 15px;
     margin-bottom: 7%;
 }
-html, .login-form, .headers, .inputs, .form-button, .admin-link, body, button, input {
-	display: flex;
-	flex-direction: column;
-	text-align: center;
-	
-}
-h1, h2 {
-	margin: 3% 0;
-}
-#invalid {
+
+html, .login-form, .headers, .inputs, .form-button, body, button, input {
+    display: flex;
+    flex-direction: column;
     text-align: center;
-    color: #ff0000;
+
+}
+
+h1, h2 {
+    margin: 3% 0;
 }
 
 #error {
@@ -60,8 +56,4 @@ h1, h2 {
     margin-right: auto;
     color: #F00;
     text-align: center;
-}
-
-label, input, button{
-    font-family: Lato, sans-serif;
 }
