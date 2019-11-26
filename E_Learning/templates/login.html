@@ -12,7 +12,13 @@
 <form class="login-form" action="/" method="post">
     {% csrf_token %}
     <div class="headers">
-        <h2>E-Learning Public Site</h2>
+        {% if account_type == "public" %}
+            <h2>E-Learning Public Site</h2>
+        {% elif account_type == "corporate" %}
+            <h2>E-Learning Corporate Site</h2>
+        {% else %}
+            <h2>E-Learning Manager Site</h2>
+        {% endif %}
         <h3>Log In</h3>
     </div>
     <div class="inputs">

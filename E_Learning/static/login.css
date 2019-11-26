@@ -4,6 +4,7 @@
 html, body {
     background: lightgrey;
     height: 100%;
+    margin: 0;
 }
 
 * {
