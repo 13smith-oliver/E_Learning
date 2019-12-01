@@ -1,7 +1,9 @@
-from django.conf.urls import url
+# Common/Urls.py
 
+from django.conf.urls import url
 from . import views
 
+# Define the url patterns. If a pattern is matched, it will call the associated view.
 urlpatterns = [
     url(r'login/public', views.public_login, name='public_login'),
     url(r'login/corporate', views.corporate_login, name='corporate_login'),
