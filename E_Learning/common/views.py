@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 
 # Import classes from local models and forms to use in the views file
 from .models import AppUsers
-from .forms import LoginForm
+from .forms import LoginForm, CreateAccount
 
 
 # Home view that renders the landing page. Rendering will take the template and substitute any necessary code and
@@ -89,8 +89,24 @@ def manager_login(request):
 
 
 def account_public(request):
-    return HttpResponse("public account creation")  # TODO: Swap to web page
-
+    if request.method == "POST":
+        form = CreateAccount(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]  # TODO: Add Backend for account creation
+            
+    else:
+        form = CreateAccount()
+        return render(request, "account.html", {"form": form, "account_type": "public"})
 
 def account_corporate(request):
-    return HttpResponse("corporate account creation")  # TODO: Swap to web page
+    if request.method == "POST":
+        form = CreateAccount(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]  # TODO: Add Backend for account creation
+            
+    else:
+        form = CreateAccount()
+        return render(request, "account.html", {"form": form, "account_type": "corporate"})
+

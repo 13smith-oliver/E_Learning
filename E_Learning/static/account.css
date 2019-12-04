@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+/*TODO: Remove redundant styles and change colours + font */
+
+html, body {
+    background: lightgrey;
+    height: 100%;
+    margin: 0;
+}
+
+* {
+    font-family: "Roboto", Arial, sans-serif;
+}
+
+.login-form {
+    width: 400px;
+    height: 600px;
+    margin: auto;
+    border-radius: 15px;
+    background: grey;
+}
+
+.headers {
+    width: 80%;
+    margin: 0 auto;
+}
+
+/*.inputs {*/
+/*    width: 100%;*/
+/*    flex-direction: row !important;*/
+/*    flex-wrap: wrap;*/
+/*}*/
+
+label, input{
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90%;
+}
+
+button {
+    background: #AFAFAF;
+    border: 1px solid rgba(0, 0, 0, 0.40);
+    border-radius: 15px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    width: 100%;
+}
+
+input {
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    height: 40px;
+    border-radius: 15px;
+    margin-bottom: 7%;
+    text-align: center;
+}
+
+html, .login-form, .headers, .form-button, body, button {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+.form-button{
+    margin-left: auto;
+    margin-right: 5%;
+}
+
+h1, h2 {
+    margin: 3% 0;
+}
+th {
+    font-weight: normal;
+}
+
+#error {
+    margin-left: auto;
+    margin-right: auto;
+    color: #F00;
+    text-align: center;
+}
