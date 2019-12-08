@@ -11,7 +11,7 @@ class Companies(models.Model):
     company_id = models.AutoField(primary_key=True)
     # Create a character field called name, with a maximum length of 50 characters.
     name = models.CharField(max_length=50)
-    businesscode = models.CharField(max_length=5)
+    business_code = models.CharField(max_length=5)
 
 
 # Create a model called AppUsers, which will create an appusers table in the database which will extend the number of

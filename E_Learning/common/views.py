@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Import classes from local models and forms to use in the views file
-from .models import AppUsers
+from .models import AppUsers, Companies
 from .forms import LoginForm, CreateAccount
 
 
@@ -99,27 +99,45 @@ def account_public(request):
             last_name = form.cleaned_data["last_name"]
             password = form.cleaned_data["password"]
             confirm = form.cleaned_data["confirm"]
-            businesscode = form.cleaned_data["businesscode"]
             print(form.cleaned_data)
             if password == confirm:
-                user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email, password=password)
+                user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
+                                                password=password)
                 app_user = AppUsers(user=user, account_type="PUBLIC")
+                app_user.save()
                 # TODO: Test Backend for account creation
             else:
-                pass # TODO: Return error for password not matching
+                pass  # TODO: Return error for password not matching
         else:
-            pass # TODO: Return error for form not valid
+            pass  # TODO: Return error for form not valid
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "public"})
+
 
 def account_corporate(request):
     if request.method == "POST":
         form = CreateAccount(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]  # TODO: Add Backend for account creation
+            email = form.cleaned_data["email"]
+            first_name = form.cleaned_data["first_name"]
+            last_name = form.cleaned_data["last_name"]
+            password = form.cleaned_data["password"]
+            confirm = form.cleaned_data["confirm"]
+            business_code = form.cleaned_data["business_code"]
+            print(form.cleaned_data)
+            if password == confirm:
+                user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
+                                                password=password)
+                company = Companies.objects.get(business_code=business_code)
+                app_user = AppUsers(user=user, account_type="CORPORATE", company_id=company)
+                app_user.save()
+                # TODO: Test Backend for account creation
+            else:
+                pass  # TODO: Return error for password not matching
+        else:
+            pass  # TODO: Return error for form not valid
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "corporate"})
-

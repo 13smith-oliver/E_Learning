@@ -17,4 +17,4 @@ class CreateAccount(forms.Form):
     last_name = forms.CharField(label='Last Name', min_length=1, max_length=150)
     password = forms.CharField(label='Password', min_length=5, max_length=150, widget=forms.PasswordInput)
     confirm = forms.CharField(label='Confirm Password', min_length=5, max_length=150, widget=forms.PasswordInput)
-    businesscode = forms.CharField(label='Please enter your business code', min_length=5, max_length=5)
+    business_code = forms.CharField(label='Please enter your business code', min_length=5, max_length=5)
