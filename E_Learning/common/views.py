@@ -2,6 +2,7 @@
 
 # Import Django libraries to authenticate user, log them in, and serve the web pages.
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -93,8 +94,21 @@ def account_public(request):
         form = CreateAccount(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]  # TODO: Add Backend for account creation
-            
+            email = form.cleaned_data["email"]
+            first_name = form.cleaned_data["first_name"]
+            last_name = form.cleaned_data["last_name"]
+            password = form.cleaned_data["password"]
+            confirm = form.cleaned_data["confirm"]
+            businesscode = form.cleaned_data["businesscode"]
+            print(form.cleaned_data)
+            if password == confirm:
+                user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email, password=password)
+                app_user = AppUsers(user=user, account_type="PUBLIC")
+                # TODO: Test Backend for account creation
+            else:
+                pass # TODO: Return error for password not matching
+        else:
+            pass # TODO: Return error for form not valid
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "public"})
@@ -105,7 +119,6 @@ def account_corporate(request):
         if form.is_valid():
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]  # TODO: Add Backend for account creation
-            
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "corporate"})

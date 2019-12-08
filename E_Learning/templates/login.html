@@ -8,7 +8,7 @@
 </head>
 
 <body> {# TODO: edit layout, fix margins #}
-<form class="login-form" action="/" method="post">
+<form class="login-form" method="post">
     {% csrf_token %}
     <div class="headers">
         {% if account_type == "public" %}

@@ -11,6 +11,7 @@ class Companies(models.Model):
     company_id = models.AutoField(primary_key=True)
     # Create a character field called name, with a maximum length of 50 characters.
     name = models.CharField(max_length=50)
+    businesscode = models.CharField(max_length=5)
 
 
 # Create a model called AppUsers, which will create an appusers table in the database which will extend the number of
@@ -20,7 +21,7 @@ class AppUsers(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='+')
     # Creates a Foreign Key linking to User so that if the user is created by a manager, the system will know who
     # made the account.
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     # Creates a Foreign Key to
     company_id = models.ForeignKey(Companies, on_delete=models.SET_NULL, null=True)
     PUBLIC = "PUBLIC"
