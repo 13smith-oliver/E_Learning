@@ -18,12 +18,12 @@ class Companies(models.Model):
 # details that the system will store about the users.
 class AppUsers(models.Model):
     # Create a One to One relationship with the default User.
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='+')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='appuser')
     # Creates a Foreign Key linking to User so that if the user is created by a manager, the system will know who
     # made the account.
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     # Creates a Foreign Key to
-    company_id = models.ForeignKey(Companies, on_delete=models.SET_NULL, null=True)
+    company = models.ForeignKey(Companies, on_delete=models.SET_NULL, null=True)
     PUBLIC = "PUBLIC"
     CORPORATE = "CORPORATE"
     MANAGER = "MANAGER"

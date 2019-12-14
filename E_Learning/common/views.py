@@ -5,10 +5,13 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django_hosts.resolvers import reverse
+from django.test import Client
+from django.db import IntegrityError
 
 # Import classes from local models and forms to use in the views file
-from .models import AppUsers, Companies
-from .forms import LoginForm, CreateAccount
+from common.models import AppUsers, Companies
+from common.forms import LoginForm, CreateAccount
 
 
 # Home view that renders the landing page. Rendering will take the template and substitute any necessary code and
@@ -33,10 +36,10 @@ def public_login(request):
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.users.account_type == AppUsers.PUBLIC:
+                if user.appuser.account_type == AppUsers.PUBLIC:
                     login(request, user)
                     # When the user is logged in, redirect to the public subdomain
-                    return redirect("public.osmith.me")
+                    return redirect("http://public.osmith.me")
             else:
                 form = LoginForm()
                 return render(request, "error.html", {"form": form, "account_type": "public"})
@@ -55,10 +58,10 @@ def corporate_login(request):
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.users.account_type == AppUsers.CORPORATE:
+                if user.appuser.account_type == AppUsers.CORPORATE:
                     login(request, user)
                     # Redirect to corporate subdomain
-                    return redirect("corporate.osmith.me")
+                    return redirect("http://corporate.osmith.me")
             else:
                 form = LoginForm()
                 return render(request, "error.html", {"form": form, "account_type": "corporate"})
@@ -80,7 +83,7 @@ def manager_login(request):
                 if user.users.account_type == AppUsers.MANAGER:
                     login(request, user)
                     # Redirect to manager subdomain
-                    return redirect("manager.osmith.me")
+                    return redirect("http://manager.osmith.me")
             else:
                 form = LoginForm()
                 return render(request, "error.html", {"form": form})
@@ -91,6 +94,7 @@ def manager_login(request):
 
 def account_public(request):
     if request.method == "POST":
+        print(request.POST)
         form = CreateAccount(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
@@ -101,15 +105,21 @@ def account_public(request):
             confirm = form.cleaned_data["confirm"]
             print(form.cleaned_data)
             if password == confirm:
-                user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
+                try:
+                    user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
                                                 password=password)
-                app_user = AppUsers(user=user, account_type="PUBLIC")
-                app_user.save()
-                # TODO: Test Backend for account creation
+                    app_user = AppUsers(user=user, account_type="PUBLIC")
+                    app_user.save()
+                    return HttpResponse("Account Created")
+                    # TODO: Test Backend for account creation
+                except IntegrityError as e:
+                    print("IntegrityError")
+                    return HttpResponse("Username Taken")
+                
             else:
-                pass  # TODO: Return error for password not matching
+                return HttpResponse("Passwords don't match")  # TODO: Return error for password not matching
         else:
-            pass  # TODO: Return error for form not valid
+            return HttpResponse(form.errors)  # TODO: Return error for form not valid
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "public"})
@@ -128,16 +138,21 @@ def account_corporate(request):
             business_code = form.cleaned_data["business_code"]
             print(form.cleaned_data)
             if password == confirm:
-                user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
+                try:
+                    user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
                                                 password=password)
-                company = Companies.objects.get(business_code=business_code)
-                app_user = AppUsers(user=user, account_type="CORPORATE", company_id=company)
-                app_user.save()
-                # TODO: Test Backend for account creation
+                    company = Companies.objects.get(business_code=business_code)  # TODO: Handle error from company not found
+                    app_user = AppUsers(user=user, account_type="CORPORATE", company=company)
+                    app_user.save()
+                    return HttpResponse("Account Created")
+                    # TODO: Test Backend for account creation
+                except IntegrityError as e:
+                    return HttpResponse("Username already taken")
+               
             else:
-                pass  # TODO: Return error for password not matching
+                return HttpResponse("Passwords dont match")  # TODO: Return error for password not matching
         else:
-            pass  # TODO: Return error for form not valid
+            return HttpResponse("Form not valid")  # TODO: Return error for form not valid
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "corporate"})
