@@ -13,6 +13,8 @@ from common.models import AppUsers
 # it will return a redirect response object. This function can be added to all view functions within this file to
 # check their authentication status.
 def public_check(user):  # TODO: Add check as function to all views
+    print(user.is_anonymous)
+    print(user.AppUsers.account_type)
     if user.is_anonymous or user.AppUsers.account_type != AppUsers.PUBLIC:
         return redirect('http://osmith.me/login/public')
     else:
