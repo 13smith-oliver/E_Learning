@@ -47,7 +47,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -58,9 +58,11 @@ ROOT_URLCONF = 'common.urls'
 ROOT_HOSTCONF = "E_Learning.hosts"
 DEFAULT_HOST = 'common'
 
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_DOMAIN = ".osmith.me"
+
+# # SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
 # SECURE_HSTS_SECONDS = 300
 # SECURE_CONTENT_TYPE_NOSNIFF = True
 # SECURE_BROWSER_XSS_FILTER = True

@@ -40,7 +40,8 @@ def public_login(request):
                     login(request, user)
                     print("login successful")
                     # When the user is logged in, redirect to the public subdomain
-                    return redirect("http://public.osmith.me")
+                    return redirect(reverse('public_home', host='public'))
+
             else:
                 form = LoginForm()
                 return render(request, "error.html", {"form": form, "account_type": "public"})

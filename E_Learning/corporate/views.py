@@ -13,7 +13,9 @@ from common.models import AppUsers
 # it will return a redirect response object. This function can be added to all view functions within this file to
 # check their authentication status.
 def corporate_check(user):  # TODO: Add check as function to all views
-    if user.is_anonymous or user.AppUsers.account_type != AppUsers.CORPORATE:
+    if user.is_anonymous:   
+        return redirect('http://osmith.me/login/corporate')
+    elif user.appuser.account_type != AppUsers.CORPORATE:
         return redirect('http://osmith.me/login/corporate')
     else:
         return None
