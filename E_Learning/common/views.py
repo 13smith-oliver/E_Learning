@@ -107,11 +107,11 @@ def account_public(request):
             confirm = form.cleaned_data["confirm"]
             print(form.cleaned_data)
             if password == confirm:
-                if User.objects.filter(username=username).exists(): 
+                if User.objects.filter(username=username).exists():
                     return HttpResponse("Username Taken")  # TODO: Return error for username taken
                 else:
                     user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
-                                                password=password)
+                                                    password=password)
                     app_user = AppUsers(user=user, account_type="PUBLIC")
                     app_user.save()
                     return HttpResponse("Account Created")  # TODO: Switch to login and redirect
@@ -139,12 +139,13 @@ def account_corporate(request):
             business_code = form.cleaned_data["business_code"]
             print(form.cleaned_data)
             if password == confirm:
-                if User.objects.filter(username=username).exists(): 
+                if User.objects.filter(username=username).exists():
                     return HttpResponse("Username Taken")  # TODO: Return error for username taken
                 else:
                     user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
-                                                password=password)
-                    company = Companies.objects.get(business_code=business_code)  # TODO: Handle error from company not found
+                                                    password=password)
+                    company = Companies.objects.get(
+                        business_code=business_code)  # TODO: Handle error from company not found
                     app_user = AppUsers(user=user, account_type="CORPORATE", company=company)
                     app_user.save()
                     return HttpResponse("Account Created")  # TODO: Switch to login and redirect
