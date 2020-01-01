@@ -6,8 +6,6 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django_hosts.resolvers import reverse
-from django.test import Client
-from django.db import IntegrityError
 
 # Import classes from local models and forms to use in the views file
 from common.models import AppUsers, Companies
@@ -38,13 +36,15 @@ def public_login(request):
             if user is not None:
                 if user.appuser.account_type == AppUsers.PUBLIC:
                     login(request, user)
-                    print("login successful")
                     # When the user is logged in, redirect to the public subdomain
-                    return redirect(reverse('public_home', host='public'))
-
+                    return redirect("http://public.osmith.me")
+                else:
+                    return render(request, "login_error.html", {"form": form, "account_type": "public", "error_message": "domain_error"})  # TODO: Check webpage renders correctly
             else:
                 form = LoginForm()
-                return render(request, "error.html", {"form": form, "account_type": "public"})
+                return render(request, "login_error.html", {"form": form, "account_type": "public", "error_message": "incorrect"})  # TODO: Check error.html
+        else:
+            return render(request, "login_error.html", {"form": form, "account_type": "public", "error_message": "invalid"})  # TODO: Check webpage renders correctly
     else:
         form = LoginForm()
         return render(request, "login.html", {"form": form, "account_type": "public"})
@@ -64,9 +64,13 @@ def corporate_login(request):
                     login(request, user)
                     # Redirect to corporate subdomain
                     return redirect("http://corporate.osmith.me")
+                else:
+                    return render(request, "login_error.html", {"form": form, "account_type": "corporate", "error_message": "domain_error"})  # TODO: Check webpage renders correctly
             else:
                 form = LoginForm()
-                return render(request, "error.html", {"form": form, "account_type": "corporate"})
+                return render(request, "login_error.html", {"form": form, "account_type": "corporate", "error_message": "incorrect"})  # TODO: Check error.html
+        else:
+            return render(request, "login_error.html", {"form": form, "account_type": "corporate", "error_message": "invalid"})  # TODO: Check webpage renders correctly
     else:
         form = LoginForm()
         return render(request, "login.html", {"form": form, "account_type": "corporate"})
@@ -82,21 +86,23 @@ def manager_login(request):
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.users.account_type == AppUsers.MANAGER:
+                if user.appuser.account_type == AppUsers.MANAGER:
                     login(request, user)
                     # Redirect to manager subdomain
                     return redirect("http://manager.osmith.me")
+                else:
+                    return render(request, "login_error.html", {"form": form, "account_type": "manager", "error_message": "domain_error"})  # TODO: Check webpage renders correctly
             else:
                 form = LoginForm()
-                return render(request, "error.html", {"form": form})
+                return render(request, "login_error.html", {"form": form, "account_type": "manager", "error_message": "incorrect"})  # TODO: Check error.html
+        else:
+            return render(request, "login_error.html", {"form": form, "account_type": "manager", "error_message": "invalid"})  # TODO: Check webpage renders correctly
     else:
         form = LoginForm()
-        return render(request, "login.html", {"form": form})
-
+        return render(request, "login.html", {"form": form, "account_type": "manager"})
 
 def account_public(request):
     if request.method == "POST":
-        print(request.POST)
         form = CreateAccount(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
@@ -105,21 +111,20 @@ def account_public(request):
             last_name = form.cleaned_data["last_name"]
             password = form.cleaned_data["password"]
             confirm = form.cleaned_data["confirm"]
-            print(form.cleaned_data)
             if password == confirm:
                 if User.objects.filter(username=username).exists():
-                    return HttpResponse("Username Taken")  # TODO: Return error for username taken
+                    return render(request, "account_error.html", {"form": form, "account_type": "public", "error_message": "username"})  # TODO: Check webpage renders correctly
                 else:
                     user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
                                                     password=password)
                     app_user = AppUsers(user=user, account_type="PUBLIC")
                     app_user.save()
-                    return HttpResponse("Account Created")  # TODO: Switch to login and redirect
-                    # TODO: Test Backend for account creation
+                    login(request, user)
+                    return redirect("http://public.osmith.me")
             else:
-                return HttpResponse("Passwords don't match")  # TODO: Return error for password not matching
+                return render(request, "account_error.html", {"form": form, "account_type": "public", "error_message": "passwords"})  # TODO: Check webpage renders correctly
         else:
-            return HttpResponse(form.errors)  # TODO: Return error for form not valid
+            return render(request, "account_error.html", {"form": form, "account_type": "public", "error_message": "invalid"})  # TODO: Check webpage renders correctly
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "public"})
@@ -127,7 +132,6 @@ def account_public(request):
 
 def account_corporate(request):
     if request.method == "POST":
-        print(request.POST)
         form = CreateAccount(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
@@ -137,23 +141,48 @@ def account_corporate(request):
             password = form.cleaned_data["password"]
             confirm = form.cleaned_data["confirm"]
             business_code = form.cleaned_data["business_code"]
-            print(form.cleaned_data)
             if password == confirm:
                 if User.objects.filter(username=username).exists():
-                    return HttpResponse("Username Taken")  # TODO: Return error for username taken
+                    return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "username"})  # TODO: Check webpage renders correctly
                 else:
                     user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
                                                     password=password)
-                    company = Companies.objects.get(
-                        business_code=business_code)  # TODO: Handle error from company not found
+                    try:
+                        company = Companies.objects.get(
+                            business_code=business_code)  # TODO: Handle error from company not found
+                    except Companies.DoesNotExist:
+                        return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "company"})
+
                     app_user = AppUsers(user=user, account_type="CORPORATE", company=company)
                     app_user.save()
-                    return HttpResponse("Account Created")  # TODO: Switch to login and redirect
+                    login(request, user)
+                    return redirect("http://corporate.osmith.me")
                     # TODO: Test Backend for account creation
             else:
-                return HttpResponse("Passwords dont match")  # TODO: Return error for password not matching
+                return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "passwords"})  # TODO: Check webpage renders correctly
         else:
-            return HttpResponse("Form not valid")  # TODO: Return error for form not valid
+            return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "invalid"})  # TODO: Check webpage renders correctly
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "corporate"})
+
+
+def reset(request):
+    User.objects.all().delete()
+    AppUsers.objects.all().delete()
+    
+    user1 = User.objects.create_user("test1", first_name="a", last_name="b", email="a@b.com", password="test1")
+    user2 = User.objects.create_user("test2", first_name="b", last_name="c", email="b@c.com", password="test2")
+    user3 = User.objects.create_user("test3", first_name="c", last_name="d", email="c@d.com", password="test3")
+    
+    company = Companies.objects.get(business_code="code1")
+    
+    app_user1 = AppUsers(user=user1, account_type="PUBLIC")
+    app_user1.save()
+    
+    app_user2 = AppUsers(user=user2, account_type="CORPORATE", company=company)
+    app_user2.save()
+    
+    app_user3 = AppUsers(user=user3, account_type="MANAGER", company=company)
+    app_user3.save()
+    return HttpResponse("reset")

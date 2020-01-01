@@ -1,0 +1,22 @@
+{% extends "account.html" %}
+{# TODO: Swap to handle multiple errors with if statements #}
+
+{% block error %}
+
+{% if error_message == "invalid" %}
+    <p id="error">The form is invalid, please check your inputs</p>
+{% endif %}
+
+{% if error_message == "company" %}
+    <p id="error">The business code is invalid. Please check it</p>
+{% endif %}
+
+{% if error_message == "passwords" %}
+    <p id="error">Your passwords don't match. Please try again</p>
+{% endif %}
+
+{% if error_message == "username" %}
+    <p id="error">That username is already taken. Please choose another</p>
+{% endif %}
+
+{% endblock %}

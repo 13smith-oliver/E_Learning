@@ -1,0 +1,18 @@
+{% extends "login.html" %}
+{# TODO: Swap to handle multiple errors with if statements #}
+
+{% block error %}
+
+{% if error_message == "incorrect" %}
+    <p id="error">The username or password is incorrect</p>
+{% endif %}
+
+{% if error_message == "domain_error" %}
+    <p id="error">You are trying to connect to the wrong domain for your account, consider logging in to another domain</p>
+{% endif %}
+
+{% if error_message == "invalid" %}
+    <p id="error">The form is invalid, please check your inputs</p>
+{% endif %}
+
+{% endblock %}

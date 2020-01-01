@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'login/manager', views.manager_login, name='manager_login'),
     url(r'account/public', views.account_public, name='account_public'),
     url(r'account/corporate', views.account_corporate, name='account_corporate'),
+    url(r'reset', views.reset, name='reset'),
     url(r'', views.home, name='home'),
 ]

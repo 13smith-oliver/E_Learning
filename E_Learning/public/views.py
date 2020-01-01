@@ -17,9 +17,6 @@ def public_check(user):  # TODO: Add check as function to all views
         print("anonymous")
         return redirect('http://osmith.me/login/public')  # TODO: Log all conditions out to check why it is redirecting
     elif user.appuser.account_type != AppUsers.PUBLIC:
-        print(user)
-        print(user.AppUsers)
-        print(user.appUsers.account_type)
         return redirect('http://osmith.me/login/public')
     else:
         return None
