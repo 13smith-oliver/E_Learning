@@ -60,14 +60,6 @@ DEFAULT_HOST = 'common'
 
 SESSION_COOKIE_DOMAIN = ".osmith.me"
 
-# # SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = False
-# CSRF_COOKIE_SECURE = False
-# SECURE_HSTS_SECONDS = 300
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# SECURE_BROWSER_XSS_FILTER = True
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
