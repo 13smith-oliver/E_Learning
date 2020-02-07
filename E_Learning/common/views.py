@@ -5,11 +5,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django_hosts.resolvers import reverse
 
+from common.forms import LoginForm, CreateAccount
 # Import classes from local models and forms to use in the views file
 from common.models import AppUsers, Companies
-from common.forms import LoginForm, CreateAccount
 
 
 # Home view that renders the landing page. Rendering will take the template and substitute any necessary code and
@@ -39,12 +38,15 @@ def public_login(request):
                     # When the user is logged in, redirect to the public subdomain
                     return redirect("http://public.osmith.me")
                 else:
-                    return render(request, "login_error.html", {"form": form, "account_type": "public", "error_message": "domain_error"})  # TODO: Check webpage renders correctly
+                    return render(request, "login_error.html",
+                                  {"form": form, "account_type": "public", "error_message": "domain_error"})
             else:
                 form = LoginForm()
-                return render(request, "login_error.html", {"form": form, "account_type": "public", "error_message": "incorrect"})  # TODO: Check error.html
+                return render(request, "login_error.html",
+                              {"form": form, "account_type": "public", "error_message": "incorrect"})
         else:
-            return render(request, "login_error.html", {"form": form, "account_type": "public", "error_message": "invalid"})  # TODO: Check webpage renders correctly
+            return render(request, "login_error.html",
+                          {"form": form, "account_type": "public", "error_message": "invalid"})
     else:
         form = LoginForm()
         return render(request, "login.html", {"form": form, "account_type": "public"})
@@ -65,12 +67,15 @@ def corporate_login(request):
                     # Redirect to corporate subdomain
                     return redirect("http://corporate.osmith.me")
                 else:
-                    return render(request, "login_error.html", {"form": form, "account_type": "corporate", "error_message": "domain_error"})  # TODO: Check webpage renders correctly
+                    return render(request, "login_error.html",
+                                  {"form": form, "account_type": "corporate", "error_message": "domain_error"})
             else:
                 form = LoginForm()
-                return render(request, "login_error.html", {"form": form, "account_type": "corporate", "error_message": "incorrect"})  # TODO: Check error.html
+                return render(request, "login_error.html",
+                              {"form": form, "account_type": "corporate", "error_message": "incorrect"})
         else:
-            return render(request, "login_error.html", {"form": form, "account_type": "corporate", "error_message": "invalid"})  # TODO: Check webpage renders correctly
+            return render(request, "login_error.html",
+                          {"form": form, "account_type": "corporate", "error_message": "invalid"})
     else:
         form = LoginForm()
         return render(request, "login.html", {"form": form, "account_type": "corporate"})
@@ -91,16 +96,28 @@ def manager_login(request):
                     # Redirect to manager subdomain
                     return redirect("http://manager.osmith.me")
                 else:
-                    return render(request, "login_error.html", {"form": form, "account_type": "manager", "error_message": "domain_error"})  # TODO: Check webpage renders correctly
+                    return render(request, "login_error.html",
+                                  {"form": form, "account_type": "manager", "error_message": "domain_error"})
             else:
                 form = LoginForm()
-                return render(request, "login_error.html", {"form": form, "account_type": "manager", "error_message": "incorrect"})  # TODO: Check error.html
+                return render(request, "login_error.html",
+                              {"form": form, "account_type": "manager", "error_message": "incorrect"})
         else:
-            return render(request, "login_error.html", {"form": form, "account_type": "manager", "error_message": "invalid"})  # TODO: Check webpage renders correctly
+            return render(request, "login_error.html",
+                          {"form": form, "account_type": "manager", "error_message": "invalid"})
     else:
         form = LoginForm()
         return render(request, "login.html", {"form": form, "account_type": "manager"})
 
+
+# Public Account view that will return the account form that the user can use to create an account on the public
+# domain. If the request is POST the view will instead take the submitted data and build a form object from the data.
+# The server will validate the data and clean it before the account is created. If the form is valid, the password
+# equals the confirm field, and the username is not already taken, then the user will be created and an AppUser
+# record is created (The AppUser records the account type and optionally the business code), and then the user will
+# be logged in and forwarded to the public home view. If the form is not valid, then an error message will be
+# returned telling the user. If the password does not equal the confirm then the user will be told to check the
+# passwords. If the username is already taken then the user will be told to choose another.
 def account_public(request):
     if request.method == "POST":
         form = CreateAccount(request.POST)
@@ -113,7 +130,8 @@ def account_public(request):
             confirm = form.cleaned_data["confirm"]
             if password == confirm:
                 if User.objects.filter(username=username).exists():
-                    return render(request, "account_error.html", {"form": form, "account_type": "public", "error_message": "username"})  # TODO: Check webpage renders correctly
+                    return render(request, "account_error.html",
+                                  {"form": form, "account_type": "public", "error_message": "username"})
                 else:
                     user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
                                                     password=password)
@@ -122,14 +140,18 @@ def account_public(request):
                     login(request, user)
                     return redirect("http://public.osmith.me")
             else:
-                return render(request, "account_error.html", {"form": form, "account_type": "public", "error_message": "passwords"})  # TODO: Check webpage renders correctly
+                return render(request, "account_error.html",
+                              {"form": form, "account_type": "public", "error_message": "passwords"})
         else:
-            return render(request, "account_error.html", {"form": form, "account_type": "public", "error_message": "invalid"})  # TODO: Check webpage renders correctly
+            return render(request, "account_error.html",
+                          {"form": form, "account_type": "public", "error_message": "invalid"})
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "public"})
 
 
+# The Corporate Account view works the same way as the Public Account view however it also takes the business code
+# and links that to the AppUser record so that the user can be linked to a company.
 def account_corporate(request):
     if request.method == "POST":
         form = CreateAccount(request.POST)
@@ -143,11 +165,12 @@ def account_corporate(request):
             business_code = form.cleaned_data["business_code"]
             if password == confirm:
                 if User.objects.filter(username=username).exists():
-                    return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "username"})  # TODO: Check webpage renders correctly
+                    return render(request, "account_error.html",
+                                  {"form": form, "account_type": "corporate", "error_message": "username"})
                 else:
                     try:
                         company = Companies.objects.get(
-                            business_code=business_code)  # TODO: Handle error from company not found
+                            business_code=business_code)
                     except Companies.DoesNotExist:
                         return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "company"})
                         
@@ -157,32 +180,34 @@ def account_corporate(request):
                     app_user.save()
                     login(request, user)
                     return redirect("http://corporate.osmith.me")
-                    # TODO: Test Backend for account creation
             else:
-                return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "passwords"})  # TODO: Check webpage renders correctly
+                return render(request, "account_error.html",
+                              {"form": form, "account_type": "corporate", "error_message": "passwords"})
         else:
-            return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "invalid"})  # TODO: Check webpage renders correctly
+            return render(request, "account_error.html",
+                          {"form": form, "account_type": "corporate", "error_message": "invalid"})
     else:
         form = CreateAccount()
         return render(request, "account.html", {"form": form, "account_type": "corporate"})
 
 
+#  TODO: DELETE WHEN NOT NEEDED
 def reset(request):
     User.objects.all().delete()
     AppUsers.objects.all().delete()
-    
+
     user1 = User.objects.create_user("test1", first_name="a", last_name="b", email="a@b.com", password="test1")
     user2 = User.objects.create_user("test2", first_name="b", last_name="c", email="b@c.com", password="test2")
     user3 = User.objects.create_user("test3", first_name="c", last_name="d", email="c@d.com", password="test3")
-    
+
     company = Companies.objects.get(business_code="code1")
-    
+
     app_user1 = AppUsers(user=user1, account_type="PUBLIC")
     app_user1.save()
-    
+
     app_user2 = AppUsers(user=user2, account_type="CORPORATE", company=company)
     app_user2.save()
-    
+
     app_user3 = AppUsers(user=user3, account_type="MANAGER", company=company)
     app_user3.save()
     return HttpResponse("reset")
