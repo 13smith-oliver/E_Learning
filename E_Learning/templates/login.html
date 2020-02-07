@@ -21,7 +21,7 @@
         <h3>Log In</h3>
     </div>
     <div class="inputs">
-        {{ form }} {# TODO: Check form is layed out properly #}
+        {{ form }}
         <button type="submit" class="form-button">LOGIN</button>
         {% if account_type == "public" %}
             <a href="/account/public">Create Account</a>
@@ -30,7 +30,6 @@
         {% else %}
             <p>Contact administrators for a manager account</p>
         {% endif %}
-        {# TODO: Add block for reset password #}
         {% block error %}{% endblock %}
     </div>
 </form>

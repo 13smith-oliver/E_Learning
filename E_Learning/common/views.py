@@ -145,14 +145,14 @@ def account_corporate(request):
                 if User.objects.filter(username=username).exists():
                     return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "username"})  # TODO: Check webpage renders correctly
                 else:
-                    user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
-                                                    password=password)
                     try:
                         company = Companies.objects.get(
                             business_code=business_code)  # TODO: Handle error from company not found
                     except Companies.DoesNotExist:
                         return render(request, "account_error.html", {"form": form, "account_type": "corporate", "error_message": "company"})
-
+                        
+                    user = User.objects.create_user(username, first_name=first_name, last_name=last_name, email=email,
+                                                                        password=password)
                     app_user = AppUsers(user=user, account_type="CORPORATE", company=company)
                     app_user.save()
                     login(request, user)

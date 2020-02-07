@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-/*TODO: Remove redundant styles and change colours + font */
 
 html, body {
     background: lightgrey;
@@ -23,12 +22,6 @@ html, body {
     width: 80%;
     margin: 0 auto;
 }
-
-/*.inputs {*/
-/*    width: 100%;*/
-/*    flex-direction: row !important;*/
-/*    flex-wrap: wrap;*/
-/*}*/
 
 label, input{
     margin-left: 5%;
